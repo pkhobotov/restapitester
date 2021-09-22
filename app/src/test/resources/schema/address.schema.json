@@ -1,0 +1,353 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "ACME DBO API",
+    "contact": {
+      "name": "Eugene Krivosheyev",
+      "email": "ekr@bk.ru"
+    },
+    "license": {
+      "name": "All rights reserved. (C) ACME CORP."
+    }
+  },
+  "host": "localhost:8080",
+  "tags": [
+    {
+      "name": "account-controller",
+      "description": "Account Controller"
+    },
+    {
+      "name": "client-controller",
+      "description": "Client Controller"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/dbo/api/account": {
+      "get": {
+        "tags": [
+          "account-controller"
+        ],
+        "summary": "GetAccounts",
+        "description": "Returned all created address of selected currency name",
+        "operationId": "getAccountsUsingGET",
+        "parameters": [
+          {
+            "name": "X-API-VERSION",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "1",
+            "enum": [
+              "1"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Account"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/dbo/api/client": {
+      "get": {
+        "tags": [
+          "client-controller"
+        ],
+        "summary": "Info",
+        "description": "Get all clients",
+        "operationId": "getClientsUsingGET",
+        "parameters": [
+          {
+            "name": "X-API-VERSION",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "1",
+            "enum": [
+              "1"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Client"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "client-controller"
+        ],
+        "summary": "Registration",
+        "description": "Registered new user in service",
+        "operationId": "createClientUsingPOST",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "clientDto",
+            "description": "clientDto",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          },
+          {
+            "name": "X-API-VERSION",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "1",
+            "enum": [
+              "1"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Client created",
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/dbo/api/client/login/{clientLogin}": {
+      "delete": {
+        "tags": [
+          "client-controller"
+        ],
+        "summary": "Deregistration by login",
+        "description": "Delete client information",
+        "operationId": "deleteClientByLoginUsingDELETE",
+        "parameters": [
+          {
+            "name": "clientLogin",
+            "in": "path",
+            "description": "clientLogin",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-API-VERSION",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "1",
+            "enum": [
+              "1"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/dbo/api/client/{id}": {
+      "get": {
+        "tags": [
+          "client-controller"
+        ],
+        "summary": "Info",
+        "description": "Get client information",
+        "operationId": "getClientUsingGET",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "X-API-VERSION",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "1",
+            "enum": [
+              "1"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "client-controller"
+        ],
+        "summary": "Deregistration by id",
+        "description": "Delete client information",
+        "operationId": "deleteClientByIdUsingDELETE",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "X-API-VERSION",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "1",
+            "enum": [
+              "1"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Account": {
+      "type": "object",
+      "required": [
+        "amount"
+      ],
+      "properties": {
+        "amount": {
+          "type": "object"
+        },
+        "clientId": {
+          "type": "object"
+        },
+        "createStamp": {
+          "type": "object"
+        },
+        "id": {
+          "type": "object"
+        }
+      },
+      "title": "Account"
+    },
+    "Client": {
+      "type": "object",
+      "required": [
+        "login",
+        "salt",
+        "secret"
+      ],
+      "properties": {
+        "login": {
+          "type": "string",
+          "example": "admin@email.com",
+          "description": "Client login for auth",
+          "minLength": 5,
+          "maxLength": 128
+        },
+        "salt": {
+          "type": "string",
+          "example": "some-salt",
+          "description": "Client salt",
+          "minLength": 5,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_@\\-\\\\.]+$"
+        },
+        "secret": {
+          "type": "string",
+          "example": "749f09bade8aca7556749f09bade8aca7556",
+          "description": "Client secret",
+          "minLength": 5,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_@\\-\\\\.]+$"
+        }
+      },
+      "title": "Client",
+      "description": "Entity with personalized information about client"
+    }
+  }
+}
