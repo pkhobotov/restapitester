@@ -1,150 +1,133 @@
 package restapitester;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
-import javax.annotation.Generated;
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 
-/**
- * Client
- * <p>
- * Entity with personalized information about client
- */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "login",
-        "salt",
-        "secret"
-})
-@Generated("jsonschema2pojo")
+//@Builder(toBuilder = true)
+@Entity
 public class Client {
-
-    /**
-     * Client login for auth
-     * (Required)
-     */
+    @JsonProperty("id")
+    private long id;
     @JsonProperty("login")
-    @JsonPropertyDescription("Client login for auth")
     private String login;
-    /**
-     * Client salt
-     * (Required)
-     */
-    @JsonProperty("salt")
-    @JsonPropertyDescription("Client salt")
-    private String salt;
-    /**
-     * Client secret
-     * (Required)
-     */
     @JsonProperty("secret")
-    @JsonPropertyDescription("Client secret")
     private String secret;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    /**
-     * No args constructor for use in serialization
-     */
-    public Client() {
-    }
-
-    /**
-     * @param salt
-     * @param secret
-     * @param login
-     */
-    public Client(String login, String salt, String secret) {
-        super();
-        this.login = login;
+    @JsonProperty("salt")
+    private String salt;
+    @JsonProperty("created")
+    private Timestamp created;
+    @JsonProperty("enabled")
+    private boolean enabled;
+    public Client(@JsonProperty("login") String login, @JsonProperty("salt") String salt, @JsonProperty("secret") String secret) {
         this.salt = salt;
         this.secret = secret;
-    }
-
-    /**
-     * Client login for auth
-     * (Required)
-     */
-    @JsonProperty("login")
-    public String getLogin() {
-        return login;
-    }
-
-    /**
-     * Client login for auth
-     * (Required)
-     */
-    @JsonProperty("login")
-    public void setLogin(String login) {
         this.login = login;
     }
 
-    public Client withLogin(String login) {
-        this.login = login;
-        return this;
+//    public Client(@JsonProperty("id") long id,@JsonProperty("login") String login, @JsonProperty("salt") String salt, @JsonProperty("secret") String secret) {
+//        this.salt = salt;
+//        this.secret = secret;
+//        this.login = login;
+//        this.id = id;
+//    }
+
+    public Client() {}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return salt.equals(client.salt) && secret.equals(client.secret) && login.equals(client.login);
     }
 
-    /**
-     * Client salt
-     * (Required)
-     */
-    @JsonProperty("salt")
+    @Override
+    public int hashCode() {
+        return Objects.hash(salt, secret, login);
+    }
+
+    @Basic
+    @Column(name = "SALT")
     public String getSalt() {
         return salt;
     }
 
-    /**
-     * Client salt
-     * (Required)
-     */
-    @JsonProperty("salt")
     public void setSalt(String salt) {
         this.salt = salt;
     }
 
-    public Client withSalt(String salt) {
-        this.salt = salt;
-        return this;
+    @Basic
+    @Generated(GenerationTime.INSERT)
+    @Column(name = "CREATED")
+    public Timestamp getCreated() {
+        return created;
     }
 
-    /**
-     * Client secret
-     * (Required)
-     */
-    @JsonProperty("secret")
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Basic
+    @Column(name = "SECRET")
     public String getSecret() {
         return secret;
     }
 
-    /**
-     * Client secret
-     * (Required)
-     */
-    @JsonProperty("secret")
     public void setSecret(String secret) {
         this.secret = secret;
     }
 
-    public Client withSecret(String secret) {
-        this.secret = secret;
-        return this;
+    @Basic
+    @Column(name = "LOGIN", unique = true)
+    public String getLogin() {
+        return login;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    @Basic
+    @Column(name = "ENABLED")
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public Client withAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-        return this;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
+
+    @Override
+    public String toString() {
+        return
+                "Client{" +
+                        "salt = '" + salt + '\'' +
+                        ",created = '" + created + '\'' +
+                        ",id = '" + id + '\'' +
+                        ",secret = '" + secret + '\'' +
+                        ",login = '" + login + '\'' +
+                        ",enabled = '" + enabled + '\'' +
+                        "}";
+    }
+
 
 }
